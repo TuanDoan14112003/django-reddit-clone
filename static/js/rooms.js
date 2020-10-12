@@ -13,7 +13,9 @@ $(function () {
     $('.list-messages').html('')
     queryMessages(currentChannel)
   })
-
+  function systemMessage(message) {
+    $('.list-messages').append(`<h5>${message}</h5>`)
+  }
   function addMessage(message) {
     const messageWrapper = document.createElement('div')
     messageWrapper.classList.add('message', 'infinite-item')
@@ -49,6 +51,7 @@ $(function () {
       device: "browser"
     },
     function (data) {
+      systemMessage('Loading...')
       Twilio.Chat.Client.create(data.token).then(async function (client) {
         // Use client
         chatClient = client;
@@ -59,15 +62,17 @@ $(function () {
         currentChannel = room_list.items[0]
         currentChannelSid = currentChannel['sid']
         currentChannelDiv = $(`[sid=${currentChannelSid}]`)
+        console.log(currentChannel)
+        systemMessage('Getting messages...')
         $('.conversation-title').text(currentChannelDiv.attr('conversation_title'))
         queryMessages(currentChannel)
         for (channel of room_list.items) {
           channel.getMessages(1).then(async function (message) {
             newest_message = message.items[0]
-            $(`[sid=${newest_message.channel.sid}] > .new-message`).text(newest_message.body)
+            $(`[sid=${newest_message.channel.sid}] > .new-message`).text('Newest message:'+newest_message.body)
           })
           channel.on("messageAdded", function (message) {
-            $(`[sid=${message.channel.sid}] > .new-message`).text(message.body)
+            $(`[sid=${message.channel.sid}] > .new-message`).text('Newest message:'+message.body)
 
             if (message.channel.sid === currentChannelSid) {
               addMessage(message)
