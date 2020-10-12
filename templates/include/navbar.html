@@ -1,0 +1,62 @@
+{% load static %}
+{% load humanize %}
+{% load custom_tags %}
+<!-- Start navbar -->
+<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+
+        <div class="icon-container d-flex align-items-center">
+            <a href="{% url 'homepage' %}" class="navbar-brand"> <img src="/media/icon/nav-icon.png" alt="logo-image"></a>
+            <a href="{% url 'homepage' %}" class="navbar-brand"> <h4 class="navbar-icon-title">Reddit</h4></a>
+        </div>
+
+
+        <div class="button-container d-flex align-items-center justify-content-around">
+            {% if user.is_authenticated %}
+            <div class="dropdown notification-button mt-1 ml-auto">
+                <span class="number-of-notification">{{unread_notifications}}</span>
+                <button id="notification_box" class="btn dropdown-toggle" type="button" id="dropdownNoti"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-envelope"></i>
+                    {% csrf_token %}
+                </button>
+
+                <div id="notification_list" class="dropdown-menu" aria-labelledby="dropdownNoti">
+                    {% for notification in notifications %}
+                    <a class="dropdown-item d-flex align-items-between"
+                        href="{% url 'post-detail' pk=notification.post.id %}">
+                        <div class="noti-image">
+                            <img src="{{notification.actor.profile.image.url}}" alt="">
+                        </div>
+                        <div class="noti-content">
+                            <p class="noti-conntent-top"> <span>u/{{notification.actor.username}}</span>
+                                {{notification.verb}} </p>
+                            <p class="noti-conntent-bot">{{notification.timestamp|naturaltime}}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    <div class="noti-content view-more text-center">
+                        <a href="{% url 'notifications' %}"> View more...</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <span class="collapse navbar-collapse">
+                <a href="{% url 'login' %}"><button type="button"
+                        class="btn btn-outline-primary mr-3">Login</button></a>
+                <a href="{% url 'register' %}"><button type="button" class="btn btn-primary">Sign Up</button></a>
+            </span>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <a href="{% url 'profile' request.user.id %}">
+                <span class="btn dropdown-toggle">
+                    <i class="fas fa-user"></i>
+                </span>
+            </a>
+            <a href="{% url 'logout' %}"><button type="button" class="btn btn-outline-primary mr-3">Logout</button></a>
+            {% endif %}
+        </div>
+
+    </div>
+</nav>
+<!-- End navbar -->

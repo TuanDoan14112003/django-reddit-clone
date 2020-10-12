@@ -1,0 +1,96 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Navbar styling */
+.navbar-icon-title {
+    margin: 0;
+}
+.navbar form {
+    width: 30%;
+}
+.navbar form input {
+    width: 100% !important;
+    border-radius: 10px;
+}
+.navbar .dropdown-container {
+    position: relative;
+}
+.navbar .dropdown-menu {
+    position: absolute;
+    left: -80px !important;
+}
+.navbar .dropdown-item {
+    padding: 2px 5px !important;
+}
+.navbar .dropdown-item p {
+    margin: 0 10px;
+}
+.notification-button {
+    position: relative;
+    /* display: none; */
+}
+.notification-button .dropdown-menu {
+    border-radius: 10px;
+    width: 400px;
+    white-space: normal !important;
+}
+.notification-button .dropdown-menu a {
+    margin: 10px 0;
+    max-width: 400px;
+    white-space: normal !important;
+}
+.notification-button .dropdown-menu a:hover {
+    background-color:rgb(204, 204, 204);
+    
+}
+.noti-content p {
+    
+}
+.noti-content .noti-conntent-bot {
+    color: grey;
+}
+.notification-button button {
+    border: none;
+    outline: none !important;
+    background-color: transparent;
+    font-size: 1.2em;
+}
+.comment-voting button:focus {
+    border: none;
+    outline: none;
+}
+.number-of-notification {
+    font-size: 12px;
+    background-color: orange;
+    width: 17px;
+    height: 17px;
+    text-align: center;
+    position: absolute;
+    border-radius: 50%;
+    color: white;
+}
+.noti-image img {
+    width: 35px ;
+    height: 35px;
+}
+.noti-content {
+    font-size: 12px;
+}
+
+@media only screen and (max-width : 1500px) {
+    .navbar .button-container button {
+        font-size: 0.9em;
+    }
+    .dropdown-item p {
+        font-size: 0.85em;
+    }
+}
+@media only screen and (max-width : 992px) {
+    .dropdown-item p {
+        font-size: 0.7em;
+    }
+}

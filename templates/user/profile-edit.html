@@ -1,0 +1,121 @@
+{% extends 'post/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile-edit.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container-fluid main-content-section d-flex justify-content-between mt-5 ">
+            
+    <div class="main-content-left p-5">
+        <div class="container-fluid profile-header">
+            <div class="row">
+                <div class="col-3 profile-picture">
+                    <img src="../sample-img/ad-sample-6.png" alt="">
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid profile-body  ">
+            <div class="row mt-3">
+                <p class="profile-body-title col-12">
+                    Profile info
+                </p>
+            </div>
+            <div class="row mt-3">
+                <form method="POST" enctype="multipart/form-data" class="col-12">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="profile-useremail">Email</label>
+                      {{u_form.email|add_class:"form-control"}}
+                    </div>
+                    <div class="input-group mt-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">New image</span>
+                        </div>
+                        <div class="custom-file">
+                            {{p_form.image|add_class:"custom-file-input"|attr:"media_type:image"}}
+                            <label class="custom-file-label image" >Choose file</label>
+                        </div>
+                    </div>
+                    <div class="input-group mt-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">New cover</span>
+                        </div>
+                        <div class="custom-file">
+                            {{p_form.cover|add_class:"custom-file-input"|attr:"media_type:cover"}}
+                            <label class="custom-file-label cover" >Choose file</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-4">Update</button>
+                  </form>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="main-content-right">
+
+        <div class="container-fluid create-post-community right-column-background ">
+            <div class="create-post-community-banner mb-3">
+            </div>
+            <h2>Home</h2>
+            <p>Your personal Reddit frontpage. Come here to check in with your favorite communities.</p>
+            <button type="button" class="btn btn-primary btn-sm btn-block mt-3">CREATE POST</button>
+            <button type="button" class="btn btn-secondary btn-sm btn-block mt-3">CREATE COMMUNITY</button>
+        </div>
+        <div class="container-fluid ad-section mt-1">
+            <div class="ad-header-2 d-flex justify-content-between align-items-center m-3">
+                <p>Advertisement</p>
+                <button type="button" class="btn btn-light">x</i></button>
+            </div>
+            <div id="advertisement-slide-2" class="carousel slide" data-ride="carousel" data-interval = "6000">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <a href="https://www.google.com/" target="_blank">
+                        <img class="d-block w-100" src="/media/sample-img/ad-sample-6.png" alt="First Ad">
+                    </a>
+                  </div>
+                  <div class="carousel-item">
+                    <a href="https://www.google.com/" target="_blank">
+                        <img class="d-block w-100" src="/media/sample-img/ad-sample-7.png" alt="Second Ad">
+                    </a>
+                  </div>
+                  <div class="carousel-item">
+                    <a href="https://www.google.com/" target="_blank">
+                        <img class="d-block w-100" src="/media/sample-img/ad-sample-8.png" alt="Fifth Ad">
+                    </a>
+                  </div>
+                  <div class="carousel-item">
+                    <a href="https://www.google.com/" target="_blank">
+                        <img class="d-block w-100" src="/media/sample-img/ad-sample-9.png" alt="fOURTH Ad">
+                    </a>
+                  </div>
+                  <div class="carousel-item">
+                    <a href="https://www.google.com/" target="_blank">
+                        <img class="d-block w-100" src="/media/sample-img/ad-sample-10.png" alt="Third Ad">
+                    </a>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$('input[type="file"]').change(function(e){
+    var type = $(this).attr('media_type')
+    console.log(type)
+    var fileName = e.target.files[0].name;
+    var maxStringLengthAllowed = 30;
+    if (fileName.length > maxStringLengthAllowed) {
+        fileName = fileName.substring(0, maxStringLengthAllowed) + "...";
+    }
+    $(`.custom-file-label.${type}`).html(fileName);
+});
+</script>
+{% endblock %}

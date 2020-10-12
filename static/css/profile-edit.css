@@ -1,0 +1,32 @@
+.main-content-left {
+    background-color: white;
+}
+.profile-picture img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+.profile-header .text-muted {
+    color: gray !important;
+}
+.profile-body p {
+    font-weight: 400 !important;
+    font-size: 1rem;
+}
+.inputfile {
+    /* visibility: hidden etc. wont work */
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+  .inputfile:focus + label {
+    /* keyboard navigation */
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+  .inputfile + label * {
+    pointer-events: none;
+  }

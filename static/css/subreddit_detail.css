@@ -1,0 +1,113 @@
+.subreddit-cover {
+    margin-top: 60px;
+    width: 100%;
+}
+/* ddddddddddddddddddddddddddddddddddddddddddd */
+.subreddit-cover .cover-img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+/* ddddddddddddddddddddddddddddddddddddddddddddddddddddddd */
+.subreddit-cover .avatar-wrapper {
+    min-height: 30px;
+    height: 102px;
+    display: flex;
+    align-items: center;
+}
+/* ddddddddddddddddddddddddddddddd */
+.subreddit-cover .avatar-img {
+    margin-left: 22%;
+    margin-right: 20px;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    background-size: cover;
+}
+.subreddit-cover .subreddit-name-wrapper {
+    margin: 10px;
+}
+.subreddit-cover .subreddit-name-wrapper .subreddit-name {
+    font-size: 28px;
+    font-weight: 700;
+}
+.subreddit-cover .subreddit-name-wrapper .subreddit-link{
+    font-size: 14px;
+    font-weight: 500;
+}
+.subreddit-cover .button-wrapper {
+    margin: 20px;
+    width: 100px;
+}
+.about-community-section {
+    margin-bottom: 20px;
+}
+.about-community-header {
+    background: #205493;
+}
+.about-community-header p {
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 15px;
+}
+.top-community-body {
+    padding: 10px;
+}
+.top-community-body .community-review {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+}
+.top-community-body .community-member-info {
+    display: flex;
+    border-bottom: solid #cacaca 1px;
+}
+.top-community-body .community-member-info .members {
+    padding-right: 60px;
+    padding: 10px 60px 10px 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+.top-community-body .community-member-info .num {
+    font-weight: bold;
+    font-size: 14px;
+}
+.top-community-body .created-at {
+    padding-top: 10px;
+    font-weight: 400;
+    font-size: 14px;
+}
+.top-community-body .created-at i {
+    padding-right: 15px;
+    padding-bottom: 10px;
+}
+.rule-section-header {
+    background: #205493;
+}
+.rule-section-header p {
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 15px;
+}
+.rules-body .rule-wrapper .rule-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.rules-body .rule-wrapper {
+    border-bottom: solid #cacaca 1px;
+}
+.rules-body .rule-wrapper .rule-header{
+    padding: 10px;
+    padding-left: 0px;
+}
+.rules-body .rule-wrapper .rule-content{
+    padding-left: 10px;
+    display: none;
+}
+.rules-body .rule-wrapper .rule-header-wrapper i {
+    line-height: 44px;
+}
+.rules-body .rule-wrapper .rule-header-wrapper .fas.fa-chevron-up {
+    display: none;
+}

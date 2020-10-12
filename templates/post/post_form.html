@@ -1,0 +1,159 @@
+{% extends 'post/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/post-create.css' %}">
+{% endblock css %}
+{% block content %}
+<div class="main-section-newfeeds mt-5">
+    <!-- Start content -->
+    <div class="container-fluid main-content-section d-flex justify-content-between mt-5 ">
+
+        <div class="main-content-left">
+            <form method="POST" class="main-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="create-post-header mb-5">
+                    <h3>Create a post</h3>
+                </div>
+
+                <div class="posting-form mt-5 p-3">
+                    <div class="posting-form-header">
+                        <button type="button" id="post-button">
+                            <i class="fas fa-comment-alt"></i>
+                            Post
+                        </button>
+                        <button type="button" id="vimage-button">
+                            <i class="fas fa-images"></i>
+                            Image/Video
+                        </button>
+                    </div>
+                    <div class="form-group mt-3">
+                        {{form.title|add_class:"form-control"|attr:"placeholder:Title"}}
+                    </div>
+                    <div class="form-group mt-3">
+                        {{form.content|add_class:"form-control"|attr:"placeholder:Content"}}
+                    </div>
+                    <div class="custom-file post-vimage mt-5">
+                        {{form.image|add_class:"custom-file-input"}}
+                        <label class="custom-file-label" for="vimage">Choose file</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-5">Submit</button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="main-content-right">
+
+            <div class="container-fluid ad-section mt-1">
+                <div class="ad-header d-flex justify-content-between align-items-center m-3">
+                    <p>Advertisement</p>
+                    <button type="button" class="btn btn-light">x</i></button>
+                </div>
+                <div id="advertisement-slide" class="carousel slide" data-ride="carousel" data-interval="6000">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample.png" alt="First Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-2.png" alt="Second Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-5.png" alt="Fifth Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-4.png" alt="fOURTH Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-3.png" alt="Third Ad">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid ad-section mt-1">
+                <div class="ad-header-2 d-flex justify-content-between align-items-center m-3">
+                    <p>Advertisement</p>
+                    <button type="button" class="btn btn-light">x</i></button>
+                </div>
+                <div id="advertisement-slide-2" class="carousel slide" data-ride="carousel" data-interval="6000">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-6.png" alt="First Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-7.png" alt="Second Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-8.png" alt="Fifth Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-9.png" alt="fOURTH Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-10.png" alt="Third Ad">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let vimageForm = document.querySelector('.post-vimage');
+    vimageForm.style.display = "none";
+    let postTextForm = document.querySelectorAll('.main-form .form-group');
+
+    let postButton = document.getElementById('post-button');
+    let vimageButton = document.getElementById('vimage-button');
+
+    postButton.addEventListener('click', () => {
+        vimageForm.style.display = "none";
+        postButton.classList.add('button-background');
+        vimageButton.classList.remove('button-background');
+        postTextForm.forEach(element => {
+            element.style.display = "block"
+        });
+    })
+    vimageButton.addEventListener('click', () => {
+        vimageForm.style.display = "block";
+        postButton.classList.remove('button-background');
+        vimageButton.classList.add('button-background');
+        postTextForm.forEach(element => {
+            element.style.display = "none"
+        });
+    })
+
+</script>
+{% endblock content %}
+{% block script %}
+<script>
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        var maxStringLengthAllowed = 30;
+        if (fileName.length > maxStringLengthAllowed) {
+            fileName = fileName.substring(0, maxStringLengthAllowed) + "...";
+        }
+        $(`.custom-file-label`).html(fileName);
+    });
+    </script>
+{% endblock %}

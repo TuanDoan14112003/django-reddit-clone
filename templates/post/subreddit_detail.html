@@ -1,0 +1,209 @@
+{% extends 'post/base.html' %}
+{% load humanize %}
+{% load static %}
+{% load thumbnail %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/subreddit_detail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="subreddit-cover">
+    <img src="{{subreddit.cover.url}}" class="cover-img"></img>
+    <div class="avatar-wrapper">
+        {% thumbnail subreddit.avatar "90x90" crop="center" as im %}
+        <img class="avatar-img" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"></img>
+        {% endthumbnail %}
+        <div class="subreddit-name-wrapper">
+            <div class="subreddit-name">{{subreddit.name}}</div>
+            <div class="subreddit-link">r/{{subreddit.name}}</div>
+        </div>
+        {% if not_join %}
+        <div subreddit_id={{subreddit.id}} id='join_sub' class="button-wrapper"><button class="btn btn-primary btn-block">JOIN</button></div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="main-section-newfeeds">
+    <div class="container-fluid main-content-section d-flex justify-content-between">
+        <div class="main-content-left">
+            <p>Popular posts</p>
+            <div class="row padding">
+                <div class="col-12 infinite-container">
+                    <div class="sorting-bar d-flex justify-content-start padding">
+                        <button class="btn btn-light"> <i class="fas fa-star"></i> New</button>
+                    </div>
+                    {% for post in posts %}
+                    <div class="single-article d-flex  row text-center margin-top justify-content-between infinite-item">
+                        <form class="upvote-column col-1 d-flex flex-column align-items-center pt-3"
+                            data-what-type='post' data-what-id={{post.id}}>
+                            {% csrf_token %}
+                            {% with vote_value=post_votes|get_item:post.id %}
+                            <div><i onclick="vote(this)" title='upvote'
+                                    class="fas fa-arrow-alt-circle-up {% if  vote_value == 1 %} voted {% endif %}"></i>
+                            </div>
+                            <p class="score">{{post.score}}</p>
+                            <div><i onclick="vote(this)" title='downvote'
+                                    class="fas fa-arrow-alt-circle-down {% if  vote_value == -1 %} voted {% endif %}"></i>
+                            </div>
+                            {% endwith %}
+                        </form>
+                        <div class="main-article-content d-flex col-11 flex-column ">
+                            <div class="main-article-header d-flex justif mr-2y-content-start mt-3 align-items-center">
+                                <div class="subreddit-info d-flex">
+                                    <img src="{{post.author.profile.image.url}}" alt="" class="trending-text-subreddit-img">
+                                </div>
+
+                                <div class="post-info d-flex ml-3">
+                                    <p><span class="posted-by-text">Posted by</span> <span><a href="{% url 'profile' pk=post.author.id %}">u/{{post.author}}</a></span>
+                                        <span class="d-none d-xl-inline">{{post.date_posted|naturaltime}}</span> </p>
+                                </div>
+                            </div>
+                            <h5 class="individual-post-title mt-1 mr-auto">{{post.title}}</h5>
+                            <a href="{% url 'post-detail' pk=post.id %}">
+                                <div class="main-article-body text-type margin-top p-3">
+                                    <div class="article-text-content text-left">
+                                        {{post.content}}
+                                    </div>
+                                </div>
+                                {% if post.image %}
+                                <div class="main-article-body image-type margin-top p-3">
+                                    <img src="{{post.image.url}}" class="article-image-content" alt="">
+                                </div>
+                                {% endif %}
+                                <div class="main-article-interaction d-flex justify-content-start padding">
+                                    <button> <i class="fas fa-comment-alt"></i> <span>{{post.comment_count}}</span>
+                                    </button>
+                                    <button class="dropdown-toggle" id="interactiveSectionPost" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="interactiveSectionPost">
+                                        <div class="dropdown-item d-flex  align-items-center ">
+                                            <i class="fas fa-ban mr-2"></i>
+                                            <p>Hide</p>
+                                        </div>
+                                        <div class="dropdown-item d-flex  align-items-center">
+                                            <i class="far fa-flag mr-2"></i>
+                                            <p>Report</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                    <div class="loading" style="display: none;">
+                        Loading...
+                    </div>
+                    {% if posts.has_next %}
+                    <a class="infinite-more-link" href="?page={{ posts.next_page_number }}"></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="main-content-right">
+
+            <div class="container-fluid ad-section mt-1">
+                <div class="ad-header d-flex justify-content-between align-items-center m-3">
+                    <p>Advertisement</p>
+                    <button type="button" class="btn btn-light">x</i></button>
+                </div>
+                <div id="advertisement-slide" class="carousel slide" data-ride="carousel" data-interval="6000">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample.png" alt="First Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-2.png" alt="Second Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-5.png" alt="Fifth Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-4.png" alt="fOURTH Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-3.png" alt="Third Ad">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="container-fluid create-post-community right-column-background mt-5 ">
+                <div class="create-post-community-banner mb-3">
+                </div>
+                <h2>Home</h2>
+                <p>Your personal Reddit frontpage. Come here to check in with your favorite communities.</p>
+                <a href="{% url 'create-post' pk=subreddit.id %}"><button type="button" class="btn btn-primary btn-sm btn-block mt-3">CREATE POST</button></a>
+                <!-- class="btn btn-secondary btn-sm btn-block mt-3">CREATE COMMUNITY</button></a> -->
+            </div>
+            {% endif %}
+
+            <div class="container-fluid mt-3 interesting-community right-column-background">
+                <div class="interesting-community-header mb-3   ">
+                    <p>Communities you may find interesting</p>
+                </div>
+            </div>
+
+            <div class="container-fluid ad-section mt-1">
+                <div class="ad-header-2 d-flex justify-content-between align-items-center m-3">
+                    <p>Advertisement</p>
+                    <button type="button" class="btn btn-light">x</i></button>
+                </div>
+                <div id="advertisement-slide-2" class="carousel slide" data-ride="carousel" data-interval="6000">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="../../media/sample-img/ad-sample-6.png" alt="First Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="../../media/sample-img/ad-sample-7.png" alt="Second Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="../../media/sample-img/ad-sample-8.png" alt="Fifth Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="../../media/sample-img/ad-sample-9.png" alt="fOURTH Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="../../media/sample-img/ad-sample-10.png" alt="Third Ad">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{% static 'js/join_sub.js' %}"></script>
+<script>
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        onBeforePageLoad: function () {
+            $('.loading').show();
+        },
+        onAfterPageLoad: function ($items) {
+            $('.loading').hide();
+        }
+    });
+</script>
+{% endblock %}

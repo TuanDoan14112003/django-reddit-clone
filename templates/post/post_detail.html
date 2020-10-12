@@ -1,0 +1,222 @@
+{% extends 'post/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mptt_tags %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/post-details.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="main-section-newfeeds">
+    <div class="main-post-container">
+        <!-- Start content -->
+        <div class="container-fluid main-content-section d-flex justify-content-between">
+            <!-- Start Left-column -->
+            <div class="main-content-left">
+                <div class="row padding">
+                    <div class="col-12">
+                        <div class="single-article d-flex  row text-center justify-content-between">
+                            <form class="upvote-column col-1 d-flex flex-column align-items-center pt-3"
+                                data-what-type='post' data-what-id={{object.id}}>
+                                {% csrf_token %}
+                                <div><i onclick="vote(this)" title='upvote'
+                                        class="fas fa-arrow-alt-circle-up {% if  post_vote_value == 1 %} voted {% endif %}"></i>
+                                </div>
+                                <p class="score">{{object.score}}</p>
+                                <div><i onclick="vote(this)" title='downvote'
+                                        class="fas fa-arrow-alt-circle-down {% if  post_vote_value == -1 %} voted {% endif %}"></i>
+                                </div>
+                            </form>
+                            <div class="main-article-content d-flex col-11 flex-column ">
+                                <div
+                                    class="main-article-header d-flex justif mr-2y-content-start mt-3 align-items-center">
+                                    <div class="subreddit-info d-flex">
+                                        <img src="{{object.subreddit.avatar.url}}" alt=""
+                                            class="trending-text-subreddit-img">
+                                        <p><a href="{% url 'subreddit-detail' pk=object.subreddit.id %}">r/{{object.subreddit.name}}</a></p>
+                                    </div>
+
+                                    <div class="post-info d-flex ml-3">
+                                        <p><span class="posted-by-text">Posted by</span>
+                                            <span><a href="{% url 'profile' pk=object.author.id %}">u/{{object.author}}</a></span> <span class="d-none d-xl-inline">4 hours
+                                                ago</span> </p>
+                                    </div>
+                                </div>
+                                <h5 class="individual-post-title mt-1 mr-auto">{{object.title}}</h5>
+                                <div class="main-article-body text-type margin-top p-3">
+                                    <div class="article-text-content text-left">
+                                        <p>
+                                            {{object.content}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="main-article-body image-type margin-top p-3">
+                                    <img src="../../media/{{object.image}}" class="article-image-content" alt="">
+                                </div>
+                                <div class="main-article-interaction d-flex justify-content-start padding">
+                                    <button> <i class="fas fa-comment-alt"></i> <span>{{object.comment_count}}</span>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="interactiveSectionPost  ">
+                                        <div class="dropdown-item d-flex  align-items-center ">
+                                            <i class="fas fa-ban mr-2"></i>
+                                            <p>Hide</p>
+                                        </div>
+                                        <div class="dropdown-item d-flex  align-items-center">
+                                            <i class="far fa-flag mr-2"></i>
+                                            <p>Report</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 commenting-form container-fluid pt-3 pb-3">
+                                <div class="row">
+                                    <form id="main_form"
+                                        class="form-submitting-comment col-11 ml-auto d-flex flex-column"
+                                        data-parent-type="post" data-parent-id="{{ object.id }}">
+                                        {% csrf_token %}
+                                        <p class="text-left">Comment as <a href="">u/{{user}}</a></p>
+                                        <!-- <input type="text" class="commenting-text-input"> -->
+                                        <textarea type="text" class="comment_form commenting-text-input p-1 mt-3"
+                                            placeholder="What are your thoughts"></textarea>
+                                        <button class="btn btn-primary ml-auto mt-3"><span>Comment</span></button>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="comment-section container-fluid col-12">
+                                <ul id="main_comment_list">
+                                    {% recursetree comments %}
+                                    <li>
+                                        <form class="comment-voting d-flex flex-column" data-what-type="comment"
+                                            data-what-id="{{ node.id }}">
+                                            {% csrf_token %}
+                                            {% with vote_value=comment_votes|get_item:node.id %}
+                                            <button type="button"><i title="upvote" onclick="vote(this)"
+                                                    class="fas fa-arrow-alt-circle-up {% if  vote_value == 1 %} voted {% endif %}"></i></button>
+                                            <button type="button"><i title="downvote" onclick="vote(this)"
+                                                    class="fas fa-arrow-alt-circle-down {% if  vote_value == -1 %} voted {% endif %}"></i></button>
+                                            {% endwith %}
+                                        </form>
+                                        <div class="comment-details d-flex justify-content-start">
+                                            <a href="">
+                                                <a href="{% url 'profile' pk=node.author.id %}"><p class="comment-user-name">u/{{node.author}}</p></a>
+                                            </a>
+                                            <p class="score comment-points">{{node.score}} points</p>
+                                            <p class="comment-time">{{node.timestamp|naturaltime}}</p>
+                                        </div>
+                                        <div class="comment-content text-left">
+                                            {{node.html_comment|safe}}
+                                        </div>
+                                        <div class="comment-interaction d-flex justify-content-start">
+                                            <button class="reply-button"
+                                                onclick="displayHideForm(this.parentElement.parentElement)">
+                                                <i class="fas fa-comment-alt"></i>
+                                                <span>Reply</span>
+                                            </button>
+                                        </div>
+                                        <div class="col-12 container-fluid individual-reply">
+                                            <div class="row">
+                                                <form class="reply_form col-12 d-flex flex-column"
+                                                    data-parent-type="comment" data-parent-id="{{ node.id }}">
+                                                    <textarea class="comment_form" type="text" class="p-1 mt-1"
+                                                        placeholder="What are your thoughts"></textarea>
+                                                    <button
+                                                        class="btn btn-primary ml-auto mt-3"><span>Comment</span></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <ul class="child_comments" comment_id="{{node.id}}">
+                                            {% if not node.is_leaf_node %}
+                                            {{ children }}
+                                            {% endif %}
+                                        </ul>
+                                    </li>
+                                    {% endrecursetree %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Start modal reply section -->
+            <div class="modal fade" id="replySection" tabindex="-1" role="dialog" aria-labelledby="modalReplySection"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="modal-comment-text" class="col-form-label">Comment:</label>
+                                    <textarea class="form-control" id="modal-comment-text"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End modal -->
+
+            <!-- End left column -->
+
+            <!-- Start Right-column -->
+            <div class="main-content-right">                
+                <div class="container-fluid create-post-community right-column-background mt-5 ">
+                    <div class="create-post-community-banner mb-3">
+                    </div>
+                    <h2>Home</h2>
+                    <p>Your personal Reddit frontpage. Come here to check in with your favorite communities.</p>
+                    <a href="{% url 'create-post' pk=object.subreddit.id %}"><button type="button" class="btn btn-primary btn-sm btn-block mt-3">CREATE POST</button></a>
+                    <a href="{% url 'subreddit-create' %}"><button type="button" class="btn btn-secondary btn-sm btn-block mt-3">CREATE COMMUNITY</button></a>
+                </div>
+                <div class="container-fluid ad-section mt-1">
+                    <div class="ad-header-2 d-flex justify-content-between align-items-center m-3">
+                        <p>Advertisement</p>
+                        <button type="button" class="btn btn-light">x</i></button>
+                    </div>
+                    <div id="advertisement-slide-2" class="carousel slide" data-ride="carousel" data-interval="6000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <a href="https://www.google.com/" target="_blank">
+                                    <img class="d-block w-100" src="/media/sample-img/ad-sample-6.png" alt="First Ad">
+                                </a>
+                            </div>
+                            <div class="carousel-item">
+                                <a href="https://www.google.com/" target="_blank">
+                                    <img class="d-block w-100" src="/media/sample-img/ad-sample-7.png" alt="Second Ad">
+                                </a>
+                            </div>
+                            <div class="carousel-item">
+                                <a href="https://www.google.com/" target="_blank">
+                                    <img class="d-block w-100" src="/media/sample-img/ad-sample-8.png" alt="Fifth Ad">
+                                </a>
+                            </div>
+                            <div class="carousel-item">
+                                <a href="https://www.google.com/" target="_blank">
+                                    <img class="d-block w-100" src="/media/sample-img/ad-sample-9.png" alt="fOURTH Ad">
+                                </a>
+                            </div>
+                            <div class="carousel-item">
+                                <a href="https://www.google.com/" target="_blank">
+                                    <img class="d-block w-100" src="/media/sample-img/ad-sample-10.png" alt="Third Ad">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Right column -->
+        </div>
+        <!-- End content -->
+    </div>
+
+
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/submit_comment.js' %}"></script>
+    <script src="{% static 'js/comment-reply-visibility.js' %}"></script>
+{% endblock %}

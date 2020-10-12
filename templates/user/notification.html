@@ -1,0 +1,21 @@
+{% extends 'post/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/notification.css' %}">
+{% endblock %}
+{% block content %}
+<div class="main-section">
+    <div class="container-fluid notifications-wrapper d-flex justify-content-between">
+        {% for notification in notifications %}
+        <div class="noti-wrapper darker">
+            <div class="noti-title">Post Reply: <a href="#">{{notification.post.title}}</a></div>
+            <div class="content-wrapper">
+                <div class="noti-location">from <a href="#">u/{{notification.actor}}</a> via <a href="#">r/{{notification.post.subreddit.name}} </a>{{notification.timestamp|naturaltime}}</div>
+                <div class="noti-content">{{notification.verb}}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

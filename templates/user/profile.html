@@ -1,0 +1,138 @@
+{% extends 'post/base.html' %}
+{% load humanize %}
+{% load static %}
+{% load thumbnail %}
+{% load custom_tags %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="main-section-newfeeds">
+
+    <!-- Start content -->
+    <div class="container-fluid main-content-section d-flex justify-content-between">
+        <!--  -->
+        <div class="main-content-left">
+            <div class="row padding">
+                <div class="col-12 infinite-container">
+                    <div class="sorting-bar d-flex justify-content-start padding">
+                        <button class="btn btn-light"> <i class="fas fa-star"></i> New</button>
+                    </div>
+                    {% for post in posts %}
+                    <div class="single-article d-flex  row text-center margin-top justify-content-between infinite-item">
+                        <form class="upvote-column col-1 d-flex flex-column align-items-center pt-3"
+                            data-what-type='post' data-what-id={{post.id}}>
+                            {% csrf_token %}
+                            {% with vote_value=post_votes|get_item:post.id %}
+                            <div><i onclick="vote(this)" title='upvote'
+                                    class="fas fa-arrow-alt-circle-up {% if  vote_value == 1 %} voted {% endif %}"></i>
+                            </div>
+                            <p class="score">{{post.score}}</p>
+                            <div><i onclick="vote(this)" title='downvote'
+                                    class="fas fa-arrow-alt-circle-down {% if  vote_value == -1 %} voted {% endif %}"></i>
+                            </div>
+                            {% endwith %}
+                        </form>
+                        <div class="main-article-content d-flex col-11 flex-column ">
+                            <div class="main-article-header d-flex justif mr-2y-content-start mt-3 align-items-center">
+                                <div class="subreddit-info d-flex">
+                                    <img src="{{post.subreddit.avatar.url}}" alt="" class="trending-text-subreddit-img">
+                                    <p><a href="{% url 'subreddit-detail' pk=post.subreddit.id %}">r/{{post.subreddit.name}}</a></p>
+                                </div>
+
+                                <div class="post-info d-flex ml-3">
+                                    <p>
+                                        <span class="d-none d-xl-inline">{{post.date_posted|naturaltime}}</span> </p>
+                                </div>
+                            </div>
+                            <h5 class="individual-post-title mt-1 mr-auto">{{post.title}}</h5>
+                            <a href="{% url 'post-detail' pk=post.id %}">
+                                <div class="main-article-body text-type margin-top p-3">
+                                    <div class="article-text-content text-left">
+                                        {{post.content}}
+                                    </div>
+                                </div>
+                                {% if post.image %}
+                                <div class="main-article-body image-type margin-top p-3">
+                                    <img src="{{post.image.url}}" class="article-image-content" alt="">
+                                </div>
+                                {% endif %}
+                                <div class="main-article-interaction d-flex justify-content-start padding">
+                                    <button> <i class="fas fa-comment-alt"></i> <span>{{post.comment_count}}</span>
+                                    </button>
+                                    <button class="dropdown-toggle" id="interactiveSectionPost" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="interactiveSectionPost">
+                                        <div class="dropdown-item d-flex  align-items-center ">
+                                            <i class="fas fa-ban mr-2"></i>
+                                            <p>Hide</p>
+                                        </div>
+                                        <div class="dropdown-item d-flex  align-items-center">
+                                            <i class="far fa-flag mr-2"></i>
+                                            <p>Report</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                    <div class="loading" style="display: none;">
+                        Loading...
+                    </div>
+                    {% if posts.has_next %}
+                    <a class="infinite-more-link" href="?page={{ posts.next_page_number }}"></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="main-content-right">
+            <div class="container-fluid avatar-section right-column-background">
+
+                <div class="avatar-cover" style="background-image: url({{user_profile.profile.cover.url}});">
+                    <a href="{% url 'edit' %}"><button class="customize customize-cover"><i class="fas fa-pencil-alt"></i></button></a>
+                </div>
+                {% thumbnail user_profile.profile.image "90x90" crop="center" as im %}
+                <img class="avatar-image" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+                <div class="username">u/{{user_profile.username}}</div>
+                <div class="user-information-wrapper">
+                    <div class="karma-point">
+                        Karma<div class="num"><i class="far fa-sun"></i>{{user_profile.profile.karma}}</div>
+                    </div>
+                    <div class="cake-day">
+                        Cake day<div class="num"><i class="fas fa-birthday-cake"></i>{{user_profile.profile.timestamp}}
+                        </div>
+                    </div>
+                </div>
+                {% if request.user.username != user_profile.username %}
+                <div class="button-wrapper">
+                    <button class="btn btn-primary follow-btn">Follow</button>
+                    <button id="chat-btn" u1="{{request.user.username}}" u2="{{user_profile.username}}" class="btn btn-primary chat-btn" style="display: block;">Chat</button>
+                    {% csrf_token %}
+                </div>
+                {% endif %}
+            </div>
+            <button class="btn btn-primary to-top-btn">Back to top</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        onBeforePageLoad: function () {
+            $('.loading').show();
+        },
+        onAfterPageLoad: function ($items) {
+            $('.loading').hide();
+        }
+    });
+</script>
+<script src="https://media.twiliocdn.com/sdk/js/common/v0.1/twilio-common.min.js"></script>
+<script src="https://media.twiliocdn.com/sdk/js/chat/v2.0/twilio-chat.min.js"></script>
+<script src="{% static 'js/check_room.js' %}"></script>
+{% endblock %}

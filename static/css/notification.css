@@ -1,0 +1,47 @@
+.main-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(219, 224, 230);
+    padding: 2%;
+}
+.main-section .notifications-wrapper {
+    margin-top: 40px;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+}
+.main-section .notifications-wrapper .noti-wrapper {
+    padding: 10px;
+    padding-left: 20px;
+}
+.main-section .noti-wrapper.lighter {
+    background-color: #f6f7f8;
+}
+.main-section .noti-wrapper.darker {
+    background-color: #fff;
+}
+.main-section .notifications-wrapper .noti-wrapper .content-wrapper {
+    padding: 10px 20% 30px;
+    padding-left: 30px;
+}
+.main-section .noti-wrapper .noti-title {
+    font-weight: 700;
+    font-size: 16px;
+}
+.main-section .noti-wrapper .noti-location {
+    font-size: 13px;
+    color: #878a8c;
+}
+.main-section .noti-wrapper .noti-content {
+    font-size: 15px;
+    padding-top: 5px;
+    padding-left: 1px;
+    color: #373c3f;
+}
+.main-section .noti-wrapper a {
+    color: #0079d3;
+    font-weight: 600;
+}

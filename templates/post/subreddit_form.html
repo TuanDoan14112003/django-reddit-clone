@@ -1,0 +1,102 @@
+{% extends 'post/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/subreddit-create.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile-edit.css' %}">
+{% endblock %}
+{% block content %}
+<div class="main-section-newfeeds mt-5">
+    <!-- Start content -->
+    <div class="container-fluid main-content-section d-flex justify-content-between mt-5 ">
+
+        <div class="main-content-left p-5">
+            <div class="row create-sub-header">
+                <div class="col-12">
+                    <h3>Create community</h3>
+                </div>
+            </div>
+            <div class="row create-sub-main mt-5">
+                <form method="POST" class="col-12" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_name">Name</label>
+                        {{form.name|add_class:"form-control mt-3"}}
+                        <small class="form-text text-muted mt-3">Community names including capitalization cannot be
+                            changed. <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="bottom"
+                                title="Name cannot have spaces, must be between 3-21 characters, underscore(_) is the only special character that is allowed"></i>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_description">Description</label>
+                        {{form.description|add_class:"form-control mt-3"}}
+                        <small class="form-text text-muted mt-3">This is how new members come to understand your
+                            community.</small>
+                    </div>
+                    <div class="custom-file post-vimage mt-5">
+                        {{form.avatar|add_class:"custom-file-input"|attr:"media_type:avatar"}}
+                        <label class="custom-file-label avatar" for="vimage">Choose avatar</label>
+                    </div>
+                    <div class="custom-file post-vimage mt-5">
+                        {{form.cover|add_class:"custom-file-input"|attr:"media_type:cover"}}
+                        <label class="custom-file-label cover" for="vimage">Choose cover</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary"  style="margin-top: 20px">Create Community</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="main-content-right">
+            <div class="container-fluid ad-section mt-1">
+                <div class="ad-header-2 d-flex justify-content-between align-items-center m-3">
+                    <p>Advertisement</p>
+                    <button type="button" class="btn btn-light">x</i></button>
+                </div>
+                <div id="advertisement-slide-2" class="carousel slide" data-ride="carousel" data-interval="6000">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-6.png" alt="First Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-7.png" alt="Second Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-8.png" alt="Fifth Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-9.png" alt="fOURTH Ad">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://www.google.com/" target="_blank">
+                                <img class="d-block w-100" src="/media/sample-img/ad-sample-10.png" alt="Third Ad">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $('input[type="file"]').change(function(e){
+        var type = $(this).attr('media_type')
+        console.log(type)
+        var fileName = e.target.files[0].name;
+        var maxStringLengthAllowed = 30;
+        if (fileName.length > maxStringLengthAllowed) {
+            fileName = fileName.substring(0, maxStringLengthAllowed) + "...";
+        }
+        $(`.custom-file-label.${type}`).html(fileName);
+    });
+    </script>
+{% endblock %}

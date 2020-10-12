@@ -1,0 +1,89 @@
+.main-content-right .to-top-btn {
+    margin-top: 10px;
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 490px;
+    z-index: 99;
+}
+.main-section-newfeeds {
+    padding-top: 75px;
+}
+.avatar-section {
+    position: relative;
+}
+.avatar-section .customize {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border: solid 1px #0079d3;
+    color: #0079d3;
+    background-color: #fff;
+    position: absolute;
+}
+.avatar-section .customize.customize-avatar {
+    top: 53px;
+    left: 65px;
+}
+.avatar-section .customize.customize-cover {
+    top: 65px;
+    right: 20px;
+}
+.avatar-section .avatar-cover {
+    height: 100px;
+    background-color: #33a8ff;
+    background-size: cover;
+}
+.avatar-section .avatar-image {
+    height: 90px;
+    width: 90px;
+    border-radius: 6px;
+    position: absolute;
+    top: 45px;
+    left: 25px;
+    border: solid #fff 3px;
+    background-size: cover;
+}
+.avatar-section .username {
+    margin-top: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #222222;
+    margin-left: 10px;
+}
+.avatar-section .user-information-wrapper {
+    display: flex;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000;
+    font-size: 14px;
+}
+.avatar-section .user-information-wrapper .karma-point {
+    padding-right: 60px;
+    padding: 10px 60px 10px 0;
+}
+.avatar-section .user-information-wrapper .cake-day {
+    padding-top: 10px;
+}
+.avatar-section .user-information-wrapper .num {
+    font-weight: 300;
+    color: #7c7c7c;
+    font-size: 14px;
+}
+.avatar-section .user-information-wrapper i {
+    color: #24a0ed;
+    padding-right: 5px;
+}
+.avatar-section .button-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.avatar-section .button-wrapper .chat-btn {
+    width: 49%;
+    display: none;
+}
+.avatar-section .button-wrapper .follow-btn {
+    width: 49%;
+    display: none;
+}
