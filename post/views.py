@@ -119,7 +119,7 @@ def post_comment(request):
             if parent_object.author == post.author:
                 create_new_notification(recipient=post.author,actor=request.user,verb="replied your comment",post=post)
             else:
-                create_new_notification(recipient=post.author,actor=request.user,verb="commented on your post")
+                create_new_notification(recipient=post.author,actor=request.user,verb="commented on your post",post=post)
                 create_new_notification(recipient=parent_object.author,actor=request.user,verb="replied your comment",post=post)
     else:
         if parent_type == 'comment':
